@@ -1,4 +1,4 @@
-package com.Multi_User_Application.entities;
+package com.Multi_User_Application.enums;
 
 
 public enum Role {

@@ -47,5 +47,25 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updateUser){
+        try{
+            User savedUser = userService.updateUser(id, updateUser);
+            return ResponseEntity.ok(savedUser);
+        }
+        catch (UserNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+        try{
+            userService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        }catch (UserNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        }
+    }
 
 }

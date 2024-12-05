@@ -1,6 +1,7 @@
 package com.Multi_User_Application.entities;
 
 
+import com.Multi_User_Application.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -36,5 +36,22 @@ public class UserServiceImplementation implements UserService {
         }
         return userRepository.save(user);
     }
+    @Override
+    public User updateUser(Long id, User updateUser) throws UserNotFoundException{
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+        existingUser.setUsername(updateUser.getUsername());
+        existingUser.setPassword(updateUser.getPassword());
+        existingUser.setRole(updateUser.getRole());
+        return userRepository.save(existingUser);
+    }
+    @Override
+    public void deleteUser(Long id) throws UserNotFoundException{
+        if(!userRepository.existsById(id)){
+            throw new UserNotFoundException("User with id " + id + " not found");
+        }
+        userRepository.deleteById(id);
+    }
+
 
 }

@@ -2,9 +2,9 @@ package com.Multi_User_Application.controllers;
 
 
 import com.Multi_User_Application.entities.User;
-import com.Multi_User_Application.exceptions.UserNotFoundException;
+
 import com.Multi_User_Application.sevice.UserService;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,50 +22,30 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.getAllusers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id) {
-        try{
-            User user = userService.getUserById(id);
-            return ResponseEntity.ok(user);
-        }
-        catch(UserNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> addUser(@RequestBody User user){
-        try {
-            User savedUser = userService.createUser(user);
-            return new ResponseEntity <>(savedUser, HttpStatus.CREATED);
-        }
-        catch(UserNotFoundException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<User> addUser(@RequestBody User user){
+        User createdUser = userService.createUser(user);
+        return ResponseEntity.ok(createdUser);
     }
     @PutMapping("/user/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User updateUser){
-        try{
-            User savedUser = userService.updateUser(id, updateUser);
-            return ResponseEntity.ok(savedUser);
-        }
-        catch (UserNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user){
+        User updatedUser = userService.updateUser(id, user);
+        return ResponseEntity.ok(updatedUser);
     }
     @DeleteMapping
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
-        try{
-            userService.deleteUser(id);
-            return ResponseEntity.noContent().build();
-        }catch (UserNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-
-        }
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

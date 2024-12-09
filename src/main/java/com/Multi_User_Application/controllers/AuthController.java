@@ -1,7 +1,9 @@
 package com.Multi_User_Application.controllers;
 
 import com.Multi_User_Application.dtos.LoginRequest;
+import com.Multi_User_Application.dtos.SignupRequest;
 import com.Multi_User_Application.entities.User;
+import com.Multi_User_Application.enums.Role;
 import com.Multi_User_Application.repo.UserRepository;
 import com.Multi_User_Application.utiles.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +32,17 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<Map<String,String>> signup(@RequestBody User user) {
-        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+    public ResponseEntity<Map<String,String>> signup(@RequestBody SignupRequest signupRequest) {
+        Optional<User> existingUser = userRepository.findByUsername(signupRequest.getUsername());
         if (existingUser.isPresent()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Username already exists"));
         }
 
         // Hash password and save user
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
+        user.setUsername(signupRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setRole(Role.valueOf(signupRequest.getRole()));
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message","User registered succesfully"));
     }

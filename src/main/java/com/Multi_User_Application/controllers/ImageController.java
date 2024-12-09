@@ -5,6 +5,7 @@ import com.Multi_User_Application.entities.Image;
 import com.Multi_User_Application.sevice.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,12 +22,14 @@ public class ImageController {
     }
 
     @GetMapping("/images")
+    @PreAuthorize("hasAnyAuthority('Beta_Player', 'Company_User', 'Growth_Plan_Subscriber')")
     public ResponseEntity<List<Image>> getImages() {
         return ResponseEntity.ok(imageService.getImages());
     }
 
 
     @GetMapping("/image/{id}")
+    @PreAuthorize("hasAnyAuthority('Beta_Player', 'Company_User', 'Growth_Plan_Subscriber')")
     public ResponseEntity<Image> getImage(@PathVariable Long id) {
         Image image = imageService.getImage(id);
         return ResponseEntity.ok(image);
@@ -34,6 +37,7 @@ public class ImageController {
 
 
     @PostMapping("/uploadimage")
+    @PreAuthorize("hasAuthority('Beta_Player')")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
         Image image = new Image();
         image.setTitle(file.getOriginalFilename());
@@ -43,7 +47,8 @@ public class ImageController {
     }
 
 
-    @DeleteMapping("/image/{id}")
+    @DeleteMapping("/image/delete/{id}")
+    @PreAuthorize("hasAuthority('Beta_Player')")
     public ResponseEntity<?> deleteImage(@PathVariable Long id){
         imageService.deleteImage(id);
         return ResponseEntity.noContent().build();

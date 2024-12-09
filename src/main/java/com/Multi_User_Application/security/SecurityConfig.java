@@ -28,8 +28,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity in APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/signup", "/auth/login").permitAll() // Public endpoints
-                        .requestMatchers("/api/users").hasAuthority("Beta_Player") // Match the role from the token
-                        .anyRequest().authenticated() // Secure all other endpoints
+                        .requestMatchers("/api/**").authenticated()  // Secure all other endpoints
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) // Add JWT filter
                 .build();

@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // Populate SecurityContext with username and role
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        username, null, List.of(new SimpleGrantedAuthority(role)) // Use "Beta_Player"
+                        username, null, List.of(new SimpleGrantedAuthority(role))
                 );
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
